@@ -42,31 +42,33 @@ function postToTwitter(command, text, user_name, token, cb) {
     throw new Error('Nothing to tweet about.')
   }
 
+  // retweet
   if ( tweet_option == 'retweet' ) {
-
     if ( id = getStatusId(tweet_status) )  
       twitter.post('statuses/retweet', {id: id}, cb);
     else
-      throw new Error('Unable to retweet. Please specify a valid status id or url.')
-
-  } else if ( tweet_option == 'favorite' ) {
-
+      throw new Error('Unable to retweet. Please specify a valid status id or url.');
+  } 
+  // favorite
+  else if ( tweet_option == 'favorite' ) {
     if ( id = getStatusId(tweet_status) )
       twitter.post('favorites/create', {id: id}, cb); 
     else
-      throw new Error('Unable to favorite. Please specify a valid status id or url.')
-
-  } else if ( tweet_option && ( id = getStatusId( tweet_option ) ) ) {
+      throw new Error('Unable to favorite. Please specify a valid status id or url.');
+  } 
+  // reply
+  else if ( tweet_option && ( id = getStatusId( tweet_option ) ) ) {
+      if ( tweet_status[0] != '@' ) 
+        throw new Error('Replies must being with @twitter_username');
 
       if ( id )
         twitter.post('statuses/update', {status: tweet_status, in_reply_to_status_id: id}, cb);
       else
-        throw new Error('Unable to reply. Please specify a valid status id or url.')
-
-  } else {
-
+        throw new Error('Unable to reply. Please specify a valid status id or url.');
+  } 
+  // status update
+  else {
     twitter.post('statuses/update', {status: tweet_status}, cb);
-  
   }
 
   function getStatusId(status) {
@@ -84,7 +86,7 @@ app.post('/*', function(req, res, next) {
   user_name = req.body.user_name,
   token = req.body.token;
 
-  postToTwitter( command, text, user_name, token, function(error, tweet) {
+  postToTwitter( command, text, user_name, token,  function(error, tweet) {
     if (error) return next(error[0]);
     res.status(200).send('Tweeted: ' + tweet.text);
   });
