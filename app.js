@@ -14,29 +14,33 @@ var port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function postToTwitter(command, text, user_name, token, cb) {
-  if ( token != process.env.SLACK_TOKEN ) {
+  if ( !process.env.SLACK_TOKEN || token != process.env.SLACK_TOKEN ) {
     throw new Error( 'Slack token is invalid' );
   }
-  console.log(command);
+
   if (text == undefined || text == null || text == '') {
     throw new Error(
                     "status update: " + command + " I love tweeting from @SlackHQ. Thanks @SupportKit!" + "\n" +
                     "reply: " + command + " @Edchan77 I also love croissants" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
                     "retweet: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "retweet" + "\n" +
                     "favorite: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "favorite" + "\n" +
-                    "You can also just pass the status id, 649603747279147008, instead of the full status url"
+                    "You can also just pass the status id, 649603747279147008, instead of the full status url."
                     );
   }
 
   // only authorize certain slack users to tweet, if null, allow all slack users
   if ( process.env.ALLOWED_SLACK_USERS && 
       !process.env.ALLOWED_SLACK_USERS.match('\\b(' + user_name + ')\\b') ) {
-    throw new Error('This slack user, ' + user_name + ', is not authorized to tweet');
+    throw new Error('This slack user, ' + user_name + ', is not authorized to tweet.');
   }
 
   var tweet = text.split('|');
   var tweet_status = tweet.shift().trim().replace(/\/$/, ''); 
   var tweet_option = ( tweet_option = tweet.shift() ) ? tweet_option.trim().replace(/\/$/, '') : null;
+
+  if ( !tweet_status ) {
+    throw new Error('Nothing to tweet about.')
+  }
 
   if ( tweet_option == 'retweet' ) {
 
