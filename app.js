@@ -22,8 +22,8 @@ function postToTwitter(command, text, user_name, token, cb) {
     throw new Error(
                     "status update: " + command + " I love tweeting from @SlackHQ. Thanks @SupportKit!" + "\n" +
                     "reply: " + command + " @Edchan77 I also love croissants" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
-                    "retweet: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "retweet" + "\n" +
-                    "favorite: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "favorite" + "\n" +
+                    "retweet: " + command + " retweet" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
+                    "favorite: " + command + " favorite" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
                     "You can also just pass the status id, 649603747279147008, instead of the full status url."
                     );
   }
@@ -36,28 +36,28 @@ function postToTwitter(command, text, user_name, token, cb) {
 
   var tweet = text.split('|');
   var tweet_status = tweet.shift().trim().replace(/\/$/, ''); 
-  var tweet_option = ( tweet_option = tweet.shift() ) ? tweet_option.trim().replace(/\/$/, '') : null;
+  var tweet_status_id = ( tweet_status_id = tweet.shift() ) ? tweet_status_id.trim().replace(/\/$/, '') : null;
 
   if ( !tweet_status ) {
     throw new Error('Nothing to tweet about.')
   }
 
   // retweet
-  if ( tweet_option == 'retweet' ) {
-    if ( id = getStatusId(tweet_status) )  
+  if ( tweet_status == 'retweet' ) {
+    if ( id = getStatusId(tweet_status_id) )  
       twitter.post('statuses/retweet', {id: id}, cb);
     else
       throw new Error('Unable to retweet. Please specify a valid status id or url.');
   } 
   // favorite
-  else if ( tweet_option == 'favorite' ) {
-    if ( id = getStatusId(tweet_status) )
+  else if ( tweet_status == 'favorite' ) {
+    if ( id = getStatusId(tweet_status_id) )
       twitter.post('favorites/create', {id: id}, cb); 
     else
       throw new Error('Unable to favorite. Please specify a valid status id or url.');
   } 
   // reply
-  else if ( tweet_option && ( id = getStatusId( tweet_option ) ) ) {
+  else if ( tweet_status_id && ( id = getStatusId( tweet_status_id ) ) ) {
       if ( tweet_status[0] != '@' ) 
         throw new Error('Replies must being with @twitter_username');
 
