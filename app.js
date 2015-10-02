@@ -20,11 +20,10 @@ function postToTwitter(command, text, user_name, token, cb) {
 
   if (text == undefined || text == null || text == '') {
     throw new Error(
-                    "status update: " + command + " I love tweeting from @SlackHQ. Thanks @SupportKit!" + "\n" +
-                    "reply: " + command + " @Edchan77 I also love croissants" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
-                    "retweet: " + command + " retweet" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
-                    "favorite: " + command + " favorite" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
-                    "You can also just pass the status id, 649603747279147008, instead of the full status url."
+                    command + " my status update" + "\n" +
+                    command + " my reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
+                    command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
+                    command + " favorite" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n"
                     );
   }
 
