@@ -1,5 +1,5 @@
 # tweet-from-slack
-Post tweets, replies, retweets and favorites directly from Slack.
+Post tweets, replies, retweets and favorites directly from Slack. You can also disable new status update tweets, while still enabling replies, retweets, and favorites. 
 
 This code sets up a nodejs backend that responds to your Twitter Slash Command from Slack, and calls the Twitter API to post tweets. You can update your status, reply to tweets, retweet, and favorite tweets directly from Slack.
 

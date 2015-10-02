@@ -19,12 +19,18 @@ function postToTwitter(command, text, user_name, token, cb) {
   }
 
   if (text == undefined || text == null || text == '') {
-    throw new Error(
-                    command + " a status update" + "\n" +
-                    command + " a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
-                    command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
-                    command + " favorite" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n"
-                    );
+    var valid_commands = [];
+
+    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/status_update/g)) )
+      valid_commands.push( command + " a status update" );
+    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/reply/g)) )
+      valid_commands.push( command + " a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
+    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/retweet/g)) )
+      valid_commands.push( command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
+    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/favorite/g)) )
+      valid_commands.push( command + " favorite" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
+
+    throw new Error( valid_commands.join("\n") );
   }
 
   // only authorize certain slack users to tweet, if null, allow all slack users
@@ -42,7 +48,10 @@ function postToTwitter(command, text, user_name, token, cb) {
   }
 
   // retweet
-  if ( tweet_status == 'retweet' ) {
+  if (  tweet_status.match(/^retweet$/) ) {
+    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/retweet/g) )
+      throw new Error('favorites are disabled');
+
     if ( id = getStatusId(tweet_status_id) )  
       twitter.post('statuses/retweet', {id: id}, function(error, tweet, response) {
         cb(error, tweet, 'retweeted');
@@ -51,7 +60,10 @@ function postToTwitter(command, text, user_name, token, cb) {
       throw new Error('Unable to retweet. Please specify a valid status id or url.');
   } 
   // favorite
-  else if ( tweet_status == 'favorite' || tweet_status == 'favourite' ) {
+  else if ( tweet_status.match(/^favo(u?)rite$/) ) {
+    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/favo(u?)rite/g) )
+      throw new Error('favorites are disabled');
+
     if ( id = getStatusId(tweet_status_id) )
       twitter.post('favorites/create', {id: id}, function(error, tweet, response) {
         cb(error, tweet, 'favorited');
@@ -61,18 +73,24 @@ function postToTwitter(command, text, user_name, token, cb) {
   } 
   // reply
   else if ( tweet_status_id && ( id = getStatusId( tweet_status_id ) ) ) {
-      if ( tweet_status[0] != '@' ) 
-        throw new Error('Replies must being with @twitter_username');
+    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/reply/g) )
+      throw new Error('replies are disabled');
 
-      if ( id )
-        twitter.post('statuses/update', {status: tweet_status, in_reply_to_status_id: id}, function(error, tweet, response) {
-        cb(error, tweet, 'replied');
-      });
-      else
-        throw new Error('Unable to reply. Please specify a valid status id or url.');
+    if ( tweet_status[0] != '@' ) 
+      throw new Error('Replies must being with @twitter_username');
+
+    if ( id )
+      twitter.post('statuses/update', {status: tweet_status, in_reply_to_status_id: id}, function(error, tweet, response) {
+      cb(error, tweet, 'replied');
+    });
+    else
+      throw new Error('Unable to reply. Please specify a valid status id or url.');
   } 
   // status update
   else {
+    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/status_update/g) )
+      throw new Error('status updates are disabled');
+
     twitter.post('statuses/update', {status: tweet_status}, function(error, tweet, response) {
         cb(error, tweet, 'status updated');
       });
