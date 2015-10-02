@@ -45,14 +45,18 @@ function postToTwitter(command, text, user_name, token, cb) {
   // retweet
   if ( tweet_status == 'retweet' ) {
     if ( id = getStatusId(tweet_status_id) )  
-      twitter.post('statuses/retweet', {id: id}, cb);
+      twitter.post('statuses/retweet', {id: id}, function(error, tweet, response) {
+        cb(error, tweet, 'retweeted');
+      });
     else
       throw new Error('Unable to retweet. Please specify a valid status id or url.');
   } 
   // favorite
-  else if ( tweet_status == 'favorite' ) {
+  else if ( tweet_status == 'favorite' || tweet_status == 'favourite' ) {
     if ( id = getStatusId(tweet_status_id) )
-      twitter.post('favorites/create', {id: id}, cb); 
+      twitter.post('favorites/create', {id: id}, function(error, tweet, response) {
+        cb(error, tweet, 'favorited');
+      }); 
     else
       throw new Error('Unable to favorite. Please specify a valid status id or url.');
   } 
@@ -62,13 +66,17 @@ function postToTwitter(command, text, user_name, token, cb) {
         throw new Error('Replies must being with @twitter_username');
 
       if ( id )
-        twitter.post('statuses/update', {status: tweet_status, in_reply_to_status_id: id}, cb);
+        twitter.post('statuses/update', {status: tweet_status, in_reply_to_status_id: id}, function(error, tweet, response) {
+        cb(error, tweet, 'replied');
+      });
       else
         throw new Error('Unable to reply. Please specify a valid status id or url.');
   } 
   // status update
   else {
-    twitter.post('statuses/update', {status: tweet_status}, cb);
+    twitter.post('statuses/update', {status: tweet_status}, function(error, tweet, response) {
+        cb(error, tweet, 'status updated');
+      });
   }
 
   function getStatusId(status) {
@@ -86,9 +94,9 @@ app.post('/*', function(req, res, next) {
   user_name = req.body.user_name,
   token = req.body.token;
 
-  postToTwitter( command, text, user_name, token,  function(error, tweet) {
+  postToTwitter( command, text, user_name, token,  function(error, tweet, action) {
     if (error) return next(error[0]);
-    res.status(200).send('Tweeted: ' + tweet.text);
+    res.status(200).send(action + ": " + tweet.text);
   });
 });
 
