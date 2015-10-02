@@ -20,8 +20,8 @@ function postToTwitter(command, text, user_name, token, cb) {
 
   if (text == undefined || text == null || text == '') {
     throw new Error(
-                    command + " my status update" + "\n" +
-                    command + " my reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
+                    command + " a status update" + "\n" +
+                    command + " a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
                     command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n" +
                     command + " favorite" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" + "\n"
                     );
