@@ -26,9 +26,9 @@
     },
     "ALLOWED_SLACK_USERS" : {
       "description": "Slack users that allowed to tweet. Leave empty to enable all users. Separate multiple users using spaces or commas.",
-      "required": true   
+      "required": false   
     },
-    "DISABLE_FUNCTIONS" : {
+    "DISABLED_FUNCTIONS" : {
       "description" : "Disables certain twitter functions from being used. For example, you can prevent slack users from posting a new status updates, but still allow them to retweet or favorite. You can input the following: status_update, reply, retweet, favorite",
       "required": false
     }

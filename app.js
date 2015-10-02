@@ -21,13 +21,13 @@ function postToTwitter(command, text, user_name, token, cb) {
   if (text == undefined || text == null || text == '') {
     var valid_commands = [];
 
-    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/status_update/g)) )
+    if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/status_update/g)) )
       valid_commands.push( command + " a status update" );
-    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/reply/g)) )
+    if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/reply/g)) )
       valid_commands.push( command + " a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
-    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/retweet/g)) )
+    if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/retweet/g)) )
       valid_commands.push( command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
-    if ( !(process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/favorite/g)) )
+    if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/favorite/g)) )
       valid_commands.push( command + " favorite" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
 
     throw new Error( valid_commands.join("\n") );
@@ -49,7 +49,7 @@ function postToTwitter(command, text, user_name, token, cb) {
 
   // retweet
   if (  tweet_status.match(/^retweet$/) ) {
-    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/retweet/g) )
+    if ( process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/retweet/g) )
       throw new Error('favorites are disabled');
 
     if ( id = getStatusId(tweet_status_id) )  
@@ -61,7 +61,7 @@ function postToTwitter(command, text, user_name, token, cb) {
   } 
   // favorite
   else if ( tweet_status.match(/^favo(u?)rite$/) ) {
-    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/favo(u?)rite/g) )
+    if ( process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/favo(u?)rite/g) )
       throw new Error('favorites are disabled');
 
     if ( id = getStatusId(tweet_status_id) )
@@ -73,7 +73,7 @@ function postToTwitter(command, text, user_name, token, cb) {
   } 
   // reply
   else if ( tweet_status_id && ( id = getStatusId( tweet_status_id ) ) ) {
-    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/reply/g) )
+    if ( process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/reply/g) )
       throw new Error('replies are disabled');
 
     if ( tweet_status[0] != '@' ) 
@@ -88,7 +88,7 @@ function postToTwitter(command, text, user_name, token, cb) {
   } 
   // status update
   else {
-    if ( process.env.DISABLE_FUNCTIONS && process.env.DISABLE_FUNCTIONS.match(/status_update/g) )
+    if ( process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/status_update/g) )
       throw new Error('status updates are disabled');
 
     twitter.post('statuses/update', {status: tweet_status}, function(error, tweet, response) {

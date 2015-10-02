@@ -34,7 +34,7 @@
       "description": "Slack usernames that allowed to tweet. Leave empty to enable all usernames. Separate multiple usernames using spaces or commas.",
       "required": false   
     },
-    "DISABLE_FUNCTIONS" : {
+    "DISABLED_FUNCTIONS" : {
       "description" : "Disables certain twitter functions from being used. For example, you can prevent slack users from posting a new status updates, but still allow them to retweet or favorite. You can input the following: status_update, reply, retweet, favorite",
       "required": false
     }
