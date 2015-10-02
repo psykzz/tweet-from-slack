@@ -1,0 +1,28 @@
+{
+  "name": "Tweet from Slack",
+  "description": "Post tweets, replies, retweets and favorites directly from Slack",
+  "repository": "https://github.com/supportkit/tweet-from-slack",
+  "keywords": ["slack", "twitter", "tweet", "javascript", "heroku"],
+  "env": {
+    "TWITTER_CONSUMER_KEY" : {
+      "description": "consumer key",
+      "required": true
+    },
+    "TWITTER_CONSUMER_SECRET": {
+      "description": "consumer secret",
+      "required": true
+    },
+    "TWITTER_ACCESS_TOKEN_KEY": {
+      "description": "access token",
+      "required": true
+    },
+    "TWITTER_ACCESS_TOKEN_SECRET": {
+      "description": "access token secret",
+      "required": true
+    },
+    "ALLOWED_SLACK_USERS" : {
+      "description": "Slack users that allowed to tweet. Leave empty to enable all users. Separate multiple users using spaces or commas.",
+      "required": true   
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "tweet-from-slack",
+  "description": "Post tweets, replies, retweets and favorites directly from Slack",
+  "version": "1.0.0",
+  "private": true,
+  "main": "app.js",
+  "dependencies": {
+  	"express": "*",
+    "body-parser": "*",
+    "twitter": "*"
+  },
+  "env": {
+    "TWITTER_CONSUMER_KEY" : {
+      "description": "consumer key",
+      "required": true
+    },
+    "TWITTER_CONSUMER_SECRET": {
+      "description": "consumer secret",
+      "required": true
+    },
+    "TWITTER_ACCESS_TOKEN_KEY": {
+      "description": "access token",
+      "required": true
+    },
+    "TWITTER_ACCESS_TOKEN_SECRET": {
+      "description": "access token secret",
+      "required": true
+    },
+    "ALLOWED_SLACK_USERS" : {
+      "description": "Slack users that allowed to tweet. Leave empty to enable all users. Separate multiple users using spaces or commas.",
+      "required": true   
+    }
+  }
+}
