@@ -13,7 +13,10 @@ var port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function postToTwitter(command, text, user_name, cb) {
+function postToTwitter(command, text, user_name, token, cb) {
+  if ( token != process.env.SLACK_TOKEN ) {
+    throw new Error( 'Slack token is invalid' );
+  }
   console.log(command);
   if (text == undefined || text == null || text == '') {
     throw new Error(
@@ -21,7 +24,7 @@ function postToTwitter(command, text, user_name, cb) {
                     "reply: " + command + " @Edchan77 I also love croissants" + " | " + "https://twitter.com/Edchan77/status/649603747279147008" + "\n" +
                     "retweet: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "retweet" + "\n" +
                     "favorite: " + command + " https://twitter.com/Edchan77/status/649603747279147008" + " | " + "favorite" + "\n" +
-                    "You can also just pass the status id, 649603747279147008, instead of the full url, https://twitter.com/Edchan77/status/649603747279147008"
+                    "You can also just pass the status id, 649603747279147008, instead of the full status url"
                     );
   }
 
@@ -74,9 +77,10 @@ function postToTwitter(command, text, user_name, cb) {
 app.post('/*', function(req, res, next) {
   var command = req.body.command,
   text = req.body.text,
-  user_name = req.body.user_name;
+  user_name = req.body.user_name,
+  token = req.body.token;
 
-  postToTwitter( command, text, user_name, function(error, tweet) {
+  postToTwitter( command, text, user_name, token, function(error, tweet) {
     if (error) return next(error[0]);
     res.status(200).send('Tweeted: ' + tweet.text);
   });

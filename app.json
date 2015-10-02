@@ -20,6 +20,10 @@
       "description": "access token secret",
       "required": true
     },
+    "SLACK_TOKEN" : {
+      "description": "slack token generated from slash command",
+      "required": true
+    },
     "ALLOWED_SLACK_USERS" : {
       "description": "Slack users that allowed to tweet. Leave empty to enable all users. Separate multiple users using spaces or commas.",
       "required": true   
