@@ -24,7 +24,7 @@ function postToTwitter(command, text, user_name, token, cb) {
     if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/status_update/g)) )
       valid_commands.push( command + " a status update" );
     if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/reply/g)) )
-      valid_commands.push( command + " a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
+      valid_commands.push( command + "@user a reply to a tweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
     if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/retweet/g)) )
       valid_commands.push( command + " retweet" + " | " + "https://twitter.com/SupportKit/status/650007346236760064" );
     if ( !(process.env.DISABLED_FUNCTIONS && process.env.DISABLED_FUNCTIONS.match(/favorite/g)) )
